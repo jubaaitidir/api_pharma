@@ -1,26 +1,25 @@
-var medicineModel= require('../schemas/medicine');
+var categoryModel= require('../schemas/category');
 
 module.exports = {
     getAll(req, res) {
         return new Promise((resolve, reject) => {
-            medicineModel.find((err, res) => { resolve(res); });
+            categoryModel.find((err, res) => { resolve(res); });
         })
-        
 
     },
-    getMedicine(id) {
+    getCategory(id) {
        // return new Promise((resolve, reject) => {
-        const datas= medicineModel.findOne({ id_med: id });
+        const datas= categoryModel.findOne({ id_cat: id });
         return datas;
         //});
     },
-    addMedicine(data_med) {
-        const datas= medicineModel.create({ id_med: data_med.id_med, cat: data_med.cat});
+    addCategory(data_cat) {
+        const datas= categoryModel.create({ id_cat: data_cat.id_cat, nom: data_cat.nom});
         return datas;
     },
-    deleteMedicine(id) {
+    deleteCategory(id) {
         return new Promise((resolve, reject) => {
-            medicineModel.deleteOne({ id_med: id }, (err, res) => {
+            categoryModel.deleteOne({ id_cat: id }, (err, res) => {
                 // if(err) resolve(res);​
                 // if(err != null) resolve(res);              
                 resolve(res);
