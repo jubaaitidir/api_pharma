@@ -69,10 +69,10 @@ app.get('/', (req, res) => {
         //res.end("<h2> Welcome to Page " + id + "</h2>");
 
         const datas = await tools_medicine.getMedicine(id);
-        if(datas){
+        if (datas) {
             res.status(200).end(JSON.stringify(datas));
-        }else {
-            res.status(200).end(JSON.stringify({'error':'no medicine with this id'}));
+        } else {
+            res.status(200).end(JSON.stringify({ 'error': 'no medicine with this id' }));
         }
     });
 
@@ -91,7 +91,7 @@ app.post('/medicine/', async (req, res) => {
     client.connect(async () => {
         //const collection = client.db("db_pharma").collection("medecines");
         //console.log(medicine_tools.getMedicine(id_med))
-        datas= await medicine_tools.getMedicine(id_med);
+        datas = await medicine_tools.getMedicine(id_med);
         console.log(datas);
 
         if (datas) {
@@ -140,8 +140,9 @@ app.delete('/medicine/:id', async (req, res) => {
                     console.log('remove element');
                 });
                 res.status(200).end(JSON.stringify(removed_medicine));
+            } else {
+                res.status(200).end(JSON.stringify({ 'number_of_delete': 'no medicine found with this id' }))
             }
-            res.status(200).end(JSON.stringify({ 'number_of_delete': 'no medicine found with this id' }))
         });
 
 
