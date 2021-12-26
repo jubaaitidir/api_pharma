@@ -1,8 +1,13 @@
 var mongoose=require('mongoose');
-//var categorie=require('./category');
-var schema= mongoose.Schema;
+var categorie=require('./category');
+//var schema= mongoose.Schema;
 const medicineSchema=mongoose.Schema({
     id_med:Number,
-    cat:{type: schema.Types.ObjectId,ref:'categorie'}
+    title:String,
+    cat:{type: mongoose.Schema.Types.ObjectId,ref:categorie},
+    authorization_holder: String,
+    cis_code:String,
+    coposition:[],
+    generic_groups:[]
 });
 module.exports=mongoose.model('medecine',medicineSchema);

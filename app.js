@@ -102,16 +102,15 @@ app.get('/medicine/', async (req, res) => {
 
 
 app.post('/medicine/', async (req, res) => {
-    const { id_med, cat } = req.body;
+    const { id_med, title, cat,authorization_holder,cis_code} = req.body;
     //var id = req.params.id;
-
-    const data_med = { id_med: id_med, cat: cat }
+  
+    const data_med = { id_med,title, cat,authorization_holder,cis_code }
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
     client.connect(async () => {
-        //const collection = client.db("db_pharma").collection("medecines");
-        //console.log(medicine_tools.getMedicine(id_med))
+      
         datas = await medicine_tools.getMedicine(id_med);
         console.log(datas);
 
@@ -223,6 +222,7 @@ app.get('/category/', async (req, res) => {
 
         const datas = await category_tools.getCategory(id);
         if (datas) {
+            
             res.status(200).json(datas);
         } else {
             res.status(200).json({ 'error': 'no category with this id' });
@@ -234,9 +234,9 @@ app.get('/category/', async (req, res) => {
 
 
 app.post('/category/', async (req, res) => {
-    const { id_cat, nom } = req.body;
+    const { id_cat, nom, cis_code } = req.body;
 
-    const data_cat = { id_cat: id_cat, nom: nom }
+    const data_cat = { id_cat: id_cat, nom: nom, cis_code:cis_code }
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
@@ -260,10 +260,10 @@ app.post('/category/', async (req, res) => {
 });
 
 app.put('/category/', async (req, res) => {
-    const { id_cat, nom } = req.body;
+    const { id_cat, nom, cis_code } = req.body;
     console.log('id_cat :'+id_cat+'nom :'+nom)
 
-    const data_cat = { id_cat: id_cat, nom: nom }
+    const data_cat = { id_cat: id_cat, nom: nom, cis_code:cis_code }
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });

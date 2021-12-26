@@ -14,11 +14,11 @@ module.exports = {
         //});
     },
     addCategory(data_cat) {
-        const datas= categoryModel.create({ id_cat: data_cat.id_cat, nom: data_cat.nom});
+        const datas= categoryModel.create({ id_cat: data_cat.id_cat, nom: data_cat.nom, cis_code: data_cat.cis_code});
         return datas;
     },   
     updateCategory(data_cat) {
-        const datas= categoryModel.updateOne({id_cat: data_cat.id_cat},{ nom: data_cat.nom});
+        const datas= categoryModel.updateOne({id_cat: data_cat.id_cat},{ nom: data_cat.nom, cis_code: data_cat.cis_code});
         return datas;
     },
     deleteCategory(id) {

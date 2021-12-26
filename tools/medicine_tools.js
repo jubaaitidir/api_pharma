@@ -1,4 +1,4 @@
-var medicineModel= require('../schemas/medicine');
+var medicineModel = require('../schemas/medicine');
 
 module.exports = {
     getAll(req, res) {
@@ -9,17 +9,25 @@ module.exports = {
 
     },
     getMedicine(id) {
-       // return new Promise((resolve, reject) => {
-        const datas= medicineModel.findOne({ id_med: id });
+        // return new Promise((resolve, reject) => {
+        const datas = medicineModel.findOne({ id_med: id });
+        medicineModel.findOne({ "id_med": id }).populate('cat').then(res => console.log(res));
         return datas;
         //});
     },
     addMedicine(data_med) {
-        const datas= medicineModel.create({ id_med: data_med.id_med, cat: data_med.cat});
+        const datas = medicineModel.create({
+            id_med: data_med.id_med,
+            title: data_med.title,
+            cat: data_med.cat,
+            authorization_holder: data_med.authorization_holder,
+            cis_code: data_med.cis_code,
+       
+        });
         return datas;
     },
     updateMedicine(data_med) {
-        const datas= medicineModel.updateOne({id_med: data_med.id_med},{ cat: data_med.cat});
+        const datas = medicineModel.updateOne({ id_med: data_med.id_med }, { cat: data_med.cat });
         return datas;
     },
     deleteMedicine(id) {
