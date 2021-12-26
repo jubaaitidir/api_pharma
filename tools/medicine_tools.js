@@ -5,7 +5,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             medicineModel.find((err, res) => { resolve(res); });
         })
-        
+
 
     },
     getMedicine(id) {
@@ -16,6 +16,10 @@ module.exports = {
     },
     addMedicine(data_med) {
         const datas= medicineModel.create({ id_med: data_med.id_med, cat: data_med.cat});
+        return datas;
+    },
+    updateMedicine(data_med) {
+        const datas= medicineModel.updateOne({id_med: data_med.id_med},{ cat: data_med.cat});
         return datas;
     },
     deleteMedicine(id) {

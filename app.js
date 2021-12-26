@@ -163,6 +163,32 @@ app.delete('/medicine/:id', async (req, res) => {
     disconnect(client);
 });
 
+app.put('/medicine/', async (req, res) => {
+    const { id_med, cat } = req.body;
+    console.log('id_med :'+id_med+'cat:'+cat)
+
+    const data_med = { id_med: id_med, cat: cat }
+    var datas;
+    var add_data;
+    const client = await new MongoClient(url, { useNewUrlParser: true });
+    client.connect(async () => {
+        console.log(id_med);
+        datas = await medicine_tools.getMedicine(id_med);
+        console.log("my medicine"+datas);
+
+        if (!datas) {
+            res.status(200).end(JSON.stringify({ 'error': ' no medicine with this id ' }));
+        } else {
+            console.log(datas)
+            add_data = await medicine_tools.updateMedicine(data_med);
+            //console.log('im in connect' + datas);
+            res.status(201).json(add_data);
+        }
+    });
+
+    disconnect(client);
+})
+
 
 /**
  * CRUD CATEGORY
@@ -232,6 +258,34 @@ app.post('/category/', async (req, res) => {
 
 
 });
+
+app.put('/category/', async (req, res) => {
+    const { id_cat, nom } = req.body;
+    console.log('id_cat :'+id_cat+'nom :'+nom)
+
+    const data_cat = { id_cat: id_cat, nom: nom }
+    var datas;
+    var add_data;
+    const client = await new MongoClient(url, { useNewUrlParser: true });
+    client.connect(async () => {
+        console.log(id_cat);
+        datas = await category_tools.getCategory(id_cat);
+        console.log("my category"+datas);
+
+        if (!datas) {
+            res.status(200).end(JSON.stringify({ 'error': ' no category with this id ' }));
+        } else {
+           
+            add_data = await category_tools.updateCategory(data_cat);
+            //console.log('im in connect' + datas);
+            res.status(201).json(add_data);
+        }
+    });
+
+    disconnect(client);
+
+
+})
 
 
 app.delete('/category/:id', async (req, res) => {

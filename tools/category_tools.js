@@ -16,6 +16,10 @@ module.exports = {
     addCategory(data_cat) {
         const datas= categoryModel.create({ id_cat: data_cat.id_cat, nom: data_cat.nom});
         return datas;
+    },   
+    updateCategory(data_cat) {
+        const datas= categoryModel.updateOne({id_cat: data_cat.id_cat},{ nom: data_cat.nom});
+        return datas;
     },
     deleteCategory(id) {
         return new Promise((resolve, reject) => {
