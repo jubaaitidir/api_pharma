@@ -7,12 +7,13 @@ module.exports = {
         })
     },
     getMedicine(id) {
-        return new Promise((resolve, reject) => {
-            medicineModel.find({ id_med: id }, (err, res) => { resolve(res); });
-        });
+       // return new Promise((resolve, reject) => {
+        const datas= medicineModel.findOne({ id_med: id });
+        return datas;
+        //});
     },
     addMedicine(data_med) {
-        const datas=medicineModel.create({ id_med: data_med.id_med, cat: data_med.cat});
+        const datas= medicineModel.create({ id_med: data_med.id_med, cat: data_med.cat});
         return datas;
     },
     deleteMedicine(id) {
@@ -23,5 +24,5 @@ module.exports = {
                 resolve(res);
             });
         });
-    },
+    }
 }

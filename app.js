@@ -18,6 +18,7 @@ const url = "mongodb+srv://pharma:ipssi2021@clusterpharma.dyrrp.mongodb.net/db_p
 
 const medicineModel = require('./schemas/medicine');
 const categorieModel = require('./schemas/category');
+const medicine_tools = require("./tools/medicine_tools");
 
 
 
@@ -66,8 +67,13 @@ app.get('/', (req, res) => {
         var id = req.params.id;
         res.setHeader("Content-Type", "application/json");
         //res.end("<h2> Welcome to Page " + id + "</h2>");
+
         const datas = await tools_medicine.getMedicine(id);
-        res.status(200).end(JSON.stringify(datas));
+        if(datas){
+            res.status(200).end(JSON.stringify(datas));
+        }else {
+            res.status(200).end(JSON.stringify({'error':'no medicine with this id'}));
+        }
     });
 
 
@@ -77,15 +83,24 @@ app.get('/', (req, res) => {
 app.post('/medicine/', async (req, res) => {
     const { id_med, cat } = req.body;
     //var id = req.params.id;
+
     const data_med = { id_med: id_med, cat: cat }
     var datas;
+    var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
     client.connect(async () => {
         //const collection = client.db("db_pharma").collection("medecines");
+        //console.log(medicine_tools.getMedicine(id_med))
+        datas= await medicine_tools.getMedicine(id_med);
+        console.log(datas);
 
-        datas = await tools_medicine.addMedicine(data_med);
-        console.log('im in connect' + datas);
-        res.status(201).json(datas);
+        if (datas) {
+            res.status(200).end(JSON.stringify({ 'error': 'medicine with this id is already exist' }));
+        } else {
+            add_data = await tools_medicine.addMedicine(data_med);
+            console.log('im in connect' + datas);
+            res.status(201).json(add_data);
+        }
     });
     //do stuff
     // const datas = await medicineModel.create({
@@ -119,15 +134,14 @@ app.delete('/medicine/:id', async (req, res) => {
             console.log(medicine.length);
             removed_medicine = { 'number_of_delete': medicine.length }
             console.log(removed_medicine)
-            if (removed_medicine) {
+            if (medicine.length > 0) {
                 medicine.map((el) => {
                     el.remove();
                     console.log('remove element');
                 });
                 res.status(200).end(JSON.stringify(removed_medicine));
-            }else{
-                console.log(err);
             }
+            res.status(200).end(JSON.stringify({ 'number_of_delete': 'no medicine found with this id' }))
         });
 
 
