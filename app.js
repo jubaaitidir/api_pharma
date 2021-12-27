@@ -89,11 +89,13 @@ app.get('/medicine/', async (req, res) => {
         client.connect(async () => {
             
             const datas = await tools_medicine.getMedicine(id);
-            if (datas) {
-                res.status(200).json(datas);
-            } else {
+
+            console.log(datas);
+                
+            if(!datas){
                 res.status(200).json({ 'error': 'no medicine with this id' });
             }
+            res.status(200).json(datas);
         });
     });
 
@@ -132,7 +134,7 @@ app.post('/medicine/', async (req, res) => {
 app.delete('/medicine/:id', async (req, res) => {
     //const {id_med} = req.body;
     var id = req.params.id;
-    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Content-Type","application/json; charset=utf-8");
     console.log(id);
     var removed_medicine;
     const client = new MongoClient(url, { useNewUrlParser: true });
@@ -291,7 +293,7 @@ app.put('/category/', async (req, res) => {
 app.delete('/category/:id', async (req, res) => {
     //const {id_med} = req.body;
     var id = req.params.id;
-    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Content-Type","application/json; charset=utf-8");
     console.log(id);
     var removed_category;
     const client = new MongoClient(url, { useNewUrlParser: true });

@@ -9,11 +9,11 @@ module.exports = {
 
     },
     getMedicine(id) {
-        // return new Promise((resolve, reject) => {
-        const datas = medicineModel.findOne({ id_med: id });
-        medicineModel.findOne({ "id_med": id }).populate('cat').then(res => console.log(res));
-        return datas;
-        //});
+        return new Promise((resolve, reject) => {
+         medicineModel.findOne({ id_med: id },(err, res) => { resolve(res); });
+        //medicineModel.findOne({ "id_med": id }).populate('cat').then(res => console.log(res));
+        //return datas;
+        });
     },
     addMedicine(data_med) {
         const datas = medicineModel.create({
