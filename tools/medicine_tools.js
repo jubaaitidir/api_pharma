@@ -27,7 +27,7 @@ module.exports = {
         return datas;
     },
     updateMedicine(data_med) {
-        const datas = medicineModel.updateOne({ id_med: data_med.id_med }, { cat: data_med.cat });
+        const datas = medicineModel.updateOne({ id_med: data_med.id_med }, { title : data_med.title, cat: data_med.cat,authorization_holder: data_med.authorization_holder,cis_code: data_med.cis_code, composition: data_med.composition, generic_groups: data_med.generic_groups});
         return datas;
     },
     deleteMedicine(id) {

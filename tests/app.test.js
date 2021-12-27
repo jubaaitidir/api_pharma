@@ -23,7 +23,7 @@ describe("Je test les endpoints de base",()=>{
 
 
 describe("Test endpoint (/medicine/:id)", ()=>{
-    it("should return page d'accueil for param id missing",async ()=>{
+    it("should return all medicines for param id missing",async ()=>{
         const res = await request(app).get("/medicine/")
         expect(res.statusCode).toBe(200)
         expect(res.text).toBeDefined();
@@ -47,7 +47,7 @@ describe("Test endpoint (/medicine/:id)", ()=>{
 
 
 describe("Test endpoint (/category/:id)", ()=>{
-    it("should return page d'accueil for param numPage missing",async ()=>{
+    it("should return all categories for param id missing",async ()=>{
         const res = await request(app).get("/category/")
         expect(res.statusCode).toBe(200)
         expect(res.text).toBeDefined();

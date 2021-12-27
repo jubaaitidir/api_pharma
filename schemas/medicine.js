@@ -7,7 +7,7 @@ const medicineSchema=mongoose.Schema({
     cat:{type: mongoose.Schema.Types.ObjectId,ref:categorie},
     authorization_holder: String,
     cis_code:String,
-    coposition:[],
+    composition:[],
     generic_groups:[]
 });
 module.exports=mongoose.model('medecine',medicineSchema);

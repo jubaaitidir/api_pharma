@@ -165,10 +165,11 @@ app.delete('/medicine/:id', async (req, res) => {
 });
 
 app.put('/medicine/', async (req, res) => {
-    const { id_med, cat } = req.body;
+    //const { id_med, cat } = req.body;
+    const { id_med, title, cat,authorization_holder,cis_code,composition, generic_groups} = req.body;
     console.log('id_med :'+id_med+'cat:'+cat)
 
-    const data_med = { id_med: id_med, cat: cat }
+    const data_med = { id_med: id_med,title : title, cat: cat,authorization_holder: authorization_holder,cis_code: cis_code, composition: composition, generic_groups: generic_groups}
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
@@ -180,9 +181,9 @@ app.put('/medicine/', async (req, res) => {
         if (!datas) {
             res.status(200).end(JSON.stringify({ 'error': ' no medicine with this id ' }));
         } else {
-            console.log(datas)
+            //console.log(datas)
             add_data = await medicine_tools.updateMedicine(data_med);
-            //console.log('im in connect' + datas);
+            console.log('im in connect' + add_data);
             res.status(201).json(add_data);
         }
     });
