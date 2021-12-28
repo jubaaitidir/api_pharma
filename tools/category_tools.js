@@ -8,10 +8,10 @@ module.exports = {
 
     },
     getCategory(id) {
-       // return new Promise((resolve, reject) => {
+      
         const datas= categoryModel.findOne({ id_cat: id });
         return datas;
-        //});
+        
     },
     addCategory(data_cat) {
         const datas= categoryModel.create({ id_cat: data_cat.id_cat, nom: data_cat.nom, cis_code: data_cat.cis_code});

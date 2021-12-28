@@ -8,12 +8,12 @@ const mongoose = require("mongoose");
 const MongoClient = require('mongodb').MongoClient;
 
 var tools_medicine = require('./tools/medicine_tools');
-var connect_db = require('./tools/connect_mongodb');
+
 
 
 const url = "mongodb+srv://pharma:ipssi2021@clusterpharma.dyrrp.mongodb.net/db_pharma?retryWrites=true&w=majority";
 
-
+mongoose.connect(url, { useNewUrlParser: true });
 
 const medicineModel = require('./schemas/medicine');
 const categorieModel = require('./schemas/category');
@@ -59,6 +59,7 @@ app.get('/', (req, res) => {
 
 app.get('/medicine/', async (req, res) => {
 
+
     res.setHeader('Content-Type', 'application/json');
 
     const datas = await tools_medicine.getAll();
@@ -69,7 +70,7 @@ app.get('/medicine/', async (req, res) => {
     .use('/medicine/:id/', (req, res, next) => {
 
         var id_med = req.params.id;
-        // console.log(id.length);    
+
         id = parseInt(id_med);
         is_number = Number.isInteger(id);
         if ((id_med.length == 0) || (!is_number)) {
@@ -82,21 +83,20 @@ app.get('/medicine/', async (req, res) => {
     .get('/medicine/:id/', async (req, res) => {
         var id = req.params.id;
         res.setHeader("Content-Type", "application/json");
-        //res.end("<h2> Welcome to Page " + id + "</h2>");
+
 
         const client = await new MongoClient(url, { useNewUrlParser: true });
 
         client.connect(async () => {
-            
+
             const datas = await tools_medicine.getMedicine(id);
 
-            console.log(datas);
-                
-            if(!datas){
+            if (!datas) {
                 res.status(200).json({ 'error': 'no medicine with this id' });
             }
             res.status(200).json(datas);
         });
+        disconnect(client);
     });
 
 
@@ -104,23 +104,23 @@ app.get('/medicine/', async (req, res) => {
 
 
 app.post('/medicine/', async (req, res) => {
-    const { id_med, title, cat,authorization_holder,cis_code} = req.body;
-    //var id = req.params.id;
-  
-    const data_med = { id_med,title, cat,authorization_holder,cis_code }
+    const { id_med, title, cat, authorization_holder, cis_code } = req.body;
+
+
+    const data_med = { id_med, title, cat, authorization_holder, cis_code }
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
     client.connect(async () => {
-      
+
         datas = await medicine_tools.getMedicine(id_med);
-        console.log(datas);
+
 
         if (datas) {
             res.status(200).end(JSON.stringify({ 'error': 'medicine with this id is already exist' }));
         } else {
             add_data = await tools_medicine.addMedicine(data_med);
-            console.log('im in connect' + datas);
+            
             res.status(201).json(add_data);
         }
     });
@@ -132,10 +132,10 @@ app.post('/medicine/', async (req, res) => {
 
 
 app.delete('/medicine/:id', async (req, res) => {
-    //const {id_med} = req.body;
+
     var id = req.params.id;
-    res.setHeader("Content-Type","application/json; charset=utf-8");
-    console.log(id);
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+
     var removed_medicine;
     const client = new MongoClient(url, { useNewUrlParser: true });
     await client.connect(() => {
@@ -144,13 +144,13 @@ app.delete('/medicine/:id', async (req, res) => {
 
 
         medicineModel.find({ id_med: id }, function (err, medicine) {
-            console.log(medicine.length);
+
             removed_medicine = { 'number_of_delete': medicine.length }
-            console.log(removed_medicine)
+
             if (medicine.length > 0) {
                 medicine.map((el) => {
                     el.remove();
-                    console.log('remove element');
+
                 });
                 res.status(200).end(JSON.stringify(removed_medicine));
             } else {
@@ -165,25 +165,25 @@ app.delete('/medicine/:id', async (req, res) => {
 });
 
 app.put('/medicine/', async (req, res) => {
-    //const { id_med, cat } = req.body;
-    const { id_med, title, cat,authorization_holder,cis_code,composition, generic_groups} = req.body;
-    console.log('id_med :'+id_med+'cat:'+cat)
 
-    const data_med = { id_med: id_med,title : title, cat: cat,authorization_holder: authorization_holder,cis_code: cis_code, composition: composition, generic_groups: generic_groups}
+    const { id_med, title, cat, authorization_holder, cis_code, composition, generic_groups } = req.body;
+
+
+    const data_med = { id_med: id_med, title: title, cat: cat, authorization_holder: authorization_holder, cis_code: cis_code, composition: composition, generic_groups: generic_groups }
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
     client.connect(async () => {
-        console.log(id_med);
+
         datas = await medicine_tools.getMedicine(id_med);
-        console.log("my medicine"+datas);
+
 
         if (!datas) {
             res.status(200).end(JSON.stringify({ 'error': ' no medicine with this id ' }));
         } else {
             //console.log(datas)
             add_data = await medicine_tools.updateMedicine(data_med);
-            console.log('im in connect' + add_data);
+
             res.status(201).json(add_data);
         }
     });
@@ -208,7 +208,7 @@ app.get('/category/', async (req, res) => {
     .use('/category/:id/', (req, res, next) => {
 
         var id_cat = req.params.id;
-        // console.log(id.length);    
+
         id = parseInt(id_cat);
         is_number = Number.isInteger(id);
         if ((id_cat.length == 0) || (!is_number)) {
@@ -221,15 +221,20 @@ app.get('/category/', async (req, res) => {
     .get('/category/:id/', async (req, res) => {
         var id = req.params.id;
         res.setHeader("Content-Type", "application/json");
-        //res.end("<h2> Welcome to Page " + id + "</h2>");
 
-        const datas = await category_tools.getCategory(id);
-        if (datas) {
-            
-            res.status(200).json(datas);
-        } else {
-            res.status(200).json({ 'error': 'no category with this id' });
-        }
+        const client = await new MongoClient(url, { useNewUrlParser: true });
+
+        client.connect(async () => {
+
+            const datas = await category_tools.getCategory(id);
+
+            if (datas) {
+                res.status(200).json(datas);
+            } else {
+                res.status(200).json({ 'error': 'no category with this id' });
+            }
+        });
+        disconnect(client);
     });
 
 
@@ -239,20 +244,19 @@ app.get('/category/', async (req, res) => {
 app.post('/category/', async (req, res) => {
     const { id_cat, nom, cis_code } = req.body;
 
-    const data_cat = { id_cat: id_cat, nom: nom, cis_code:cis_code }
+    const data_cat = { id_cat: id_cat, nom: nom, cis_code: cis_code }
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
     client.connect(async () => {
 
         datas = await category_tools.getCategory(id_cat);
-        console.log(datas);
 
         if (datas) {
             res.status(200).end(JSON.stringify({ 'error': 'category with this id is already exist' }));
         } else {
             add_data = await category_tools.addCategory(data_cat);
-            //console.log('im in connect' + datas);
+
             res.status(201).json(add_data);
         }
     });
@@ -264,23 +268,23 @@ app.post('/category/', async (req, res) => {
 
 app.put('/category/', async (req, res) => {
     const { id_cat, nom, cis_code } = req.body;
-    console.log('id_cat :'+id_cat+'nom :'+nom)
 
-    const data_cat = { id_cat: id_cat, nom: nom, cis_code:cis_code }
+
+    const data_cat = { id_cat: id_cat, nom: nom, cis_code: cis_code }
     var datas;
     var add_data;
     const client = await new MongoClient(url, { useNewUrlParser: true });
     client.connect(async () => {
-        console.log(id_cat);
+
         datas = await category_tools.getCategory(id_cat);
-        console.log("my category"+datas);
+
 
         if (!datas) {
             res.status(200).end(JSON.stringify({ 'error': ' no category with this id ' }));
         } else {
-           
+
             add_data = await category_tools.updateCategory(data_cat);
-            //console.log('im in connect' + datas);
+
             res.status(201).json(add_data);
         }
     });
@@ -292,23 +296,23 @@ app.put('/category/', async (req, res) => {
 
 
 app.delete('/category/:id', async (req, res) => {
-    //const {id_med} = req.body;
+
     var id = req.params.id;
-    res.setHeader("Content-Type","application/json; charset=utf-8");
-    console.log(id);
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+
     var removed_category;
     const client = new MongoClient(url, { useNewUrlParser: true });
     await client.connect(() => {
-        //const collection = client.db("db_pharma").collection("medecines");
+
 
         categorieModel.find({ id_cat: id }, function (err, list_category) {
-            console.log(list_category.length);
-            removed_category = {'number_of_delete': list_category.length}
-            console.log(removed_category)
+
+            removed_category = { 'number_of_delete': list_category.length }
+
             if (list_category.length > 0) {
                 list_category.map((el) => {
                     el.remove();
-                    console.log('remove element');
+
                 });
                 res.status(200).end(JSON.stringify(removed_category));
             } else {

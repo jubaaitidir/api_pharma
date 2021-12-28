@@ -12,7 +12,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
          medicineModel.findOne({ id_med: id },(err, res) => { resolve(res); });
         //medicineModel.findOne({ "id_med": id }).populate('cat').then(res => console.log(res));
-        //return datas;
+        
         });
     },
     addMedicine(data_med) {
