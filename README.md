@@ -1,3 +1,13 @@
 # api_pharma
-backend en nodejs
+### backend with nodejs
 ![This is an image](exec_icone.png)
+
+
+## Required:
+#### npm and node should be installed in your environment
+
+## Intalling dependencies:
+#### npm install
+
+## Execute the server:
+#### npm start
