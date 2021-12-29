@@ -6,7 +6,7 @@
 ## Required:
 #### npm and node should be installed in your environment
 
-## Intalling dependencies:
+## Installing dependencies:
 #### npm install
 
 ## Execute the server:
